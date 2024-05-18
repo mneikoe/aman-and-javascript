@@ -16,4 +16,4 @@ arr.forEach(function(x)// x is the iterator of loop
 
 // entries method
 let item = [33,55,77,22]
-console.log(arr.entries)
+console.log(arr.entries())
