@@ -70,12 +70,56 @@ const type = mov > 0 ? 'deposit':'withdrawal';
  <div class="movements__row">
   <div class="movements__type movements__type--${type}">${i+1} ${type}</div>
   
-  <div class="movements__value">${mov}</div>
+  <div class="movements__value">${mov}$</div>
 </div>`
   containerMovements.insertAdjacentHTML('afterbegin',html)
 });
 }
 displayMovements(account1.movements)
+
+
+
+
+
+// calculating and print balance using reduce method
+
+const calcDisplayBalance = (movements => {
+  const balance = movements.reduce((acc,curr)=> acc + curr,0)
+  labelBalance.textContent = `${balance} $`
+})
+// displaying summary 
+const calcDisplaySummary = movements=>{
+  const incomes = movements.filter (mov => mov>0).reduce((acc,curr)=>acc+curr,0)
+  labelSumIn.textContent = `${incomes}$`
+  const out = movements.filter(mov=>mov<0).reduce((acc,curr)=>acc+curr,0)
+  labelSumOut.textContent = `${Math.abs(out)}$`
+  const interest = movements.filter(mov => mov>0).map(i=>i*1.2/100 ).reduce((acc,curr)=>acc+curr)
+  labelSumInterest.textContent = `${interest}$`
+}
+calcDisplayBalance(account1.movements)
+calcDisplaySummary(account1.movements)
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////
+//lec-152 creating shortform of name or username in the app
+
+
+const createUserName = (accs)=>{
+accs.forEach(acc=>{
+     acc.userName = acc.owner.toLowerCase().split(' ').map(name=>name[0]).join('')
+})}
+createUserName(accounts)
+
+
+
+
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES

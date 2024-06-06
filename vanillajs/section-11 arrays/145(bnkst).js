@@ -15,7 +15,7 @@ for (const movement of movements)
     console.log('--------using for each loop--------')
 movements.forEach(function(i){
     if (i>0)
-        console.log(`Youe deposited ${i}`)
+        console.log(`You deposited ${i}`)
     else
     console.log(`You Withdrew ${i}`)
 })
