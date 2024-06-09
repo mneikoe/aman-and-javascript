@@ -75,7 +75,7 @@ const type = mov > 0 ? 'deposit':'withdrawal';
   containerMovements.insertAdjacentHTML('afterbegin',html)
 });
 }
-displayMovements(account1.movements)
+
 
 
 
@@ -83,31 +83,24 @@ displayMovements(account1.movements)
 
 // calculating and print balance using reduce method
 
-const calcDisplayBalance = (movements => {
-  const balance = movements.reduce((acc,curr)=> acc + curr,0)
-  labelBalance.textContent = `${balance} $`
+const calcDisplayBalance = (accs => {
+  accs.balance = accs.movements.reduce((acc,curr)=> acc + curr,0)
+   // this will create a property in account objects named as balance and the balance will be saved
+  labelBalance.textContent = `${accs.balance} $`
 })
 // displaying summary 
-const calcDisplaySummary = movements=>{
-  const incomes = movements.filter (mov => mov>0).reduce((acc,curr)=>acc+curr,0)
+const calcDisplaySummary = acc=>{
+  const incomes = acc.movements.filter (mov => mov>0).reduce((acc,curr)=>acc+curr,0)
   labelSumIn.textContent = `${incomes}$`
-  const out = movements.filter(mov=>mov<0).reduce((acc,curr)=>acc+curr,0)
+  const out = acc.movements.filter(mov=>mov<0).reduce((acc,curr)=>acc+curr,0)
   labelSumOut.textContent = `${Math.abs(out)}$`
-  const interest = movements.filter(mov => mov>0).map(i=>i*1.2/100 ).reduce((acc,curr)=>acc+curr)
+  const interest = acc.movements.filter(mov => mov>0).map(i=>i*acc.interestRate/100 ).reduce((acc,curr)=>acc+curr)
   labelSumInterest.textContent = `${interest}$`
 }
-calcDisplayBalance(account1.movements)
-calcDisplaySummary(account1.movements)
-
-
-
-
-
-
 
 
 ////////////////////////////////////////////////////
-//lec-152 creating shortform of name or username in the app
+//lec-152 creating username in the app
 
 
 const createUserName = (accs)=>{
@@ -116,14 +109,78 @@ accs.forEach(acc=>{
 })}
 createUserName(accounts)
 
+const updateUI = acc => {
+//Display Movements
+displayMovements(acc.movements)
+
+//Display balance
+calcDisplayBalance(acc)
+
+//Display summary
+calcDisplaySummary(acc)
+}
 
 
+////////////////////////////////////////////////////
+//lec-158 implementing login
+
+let currentAccount
+
+btnLogin.addEventListener('click',function(e){
+//prevent form from submitting
+  e.preventDefault()
+  currentAccount = accounts.find(acc=>acc.userName === inputLoginUsername.value)
+  console.log(currentAccount)
+  if(currentAccount?.pin === Number(inputLoginPin.value)) {  //here ? is optional chaining means if the currentAccount exist then do next things
+    //Display UI and message
+    labelWelcome.textContent = `Welcome Back, ${currentAccount.owner.split(' ')[0]}`
+    containerApp.style.opacity = 100
+    
+    //clear input fields
+    inputLoginUsername.value =inputLoginPin.value = ''
+    inputLoginPin.blur()
+
+    updateUI(currentAccount)
+
+    
+  }
+})
+
+///////////////////////////////////////////////////
+//  lec-159 implementing transfers
+
+  
+  btnTransfer.addEventListener('click', function(e){
+    e.preventDefault()
+    const amount = Number(inputTransferAmount.value)
+    const receiverAcc = accounts.find(acc=>acc.userName === inputTransferTo.value)
+    console.log(amount,receiverAcc)
+    //receiverAcc.movements.push(inputTransferAmount.value).filter(mov=> mov>0).reduce((acc,curr)=>acc+curr,0)
+    inputTransferAmount.value = inputTransferTo.value = ''
+    inputTransferAmount.blur()
+    if(amount > 0 && receiverAcc && currentAccount.balance >= amount && receiverAcc.userName !== currentAccount.userName){
+      currentAccount.movements.push(-amount)
+      receiverAcc.movements.push(amount)
+      updateUI(currentAccount)
+    } 
+  })
 
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// LECTURES
+// implementing close account
 
+btnClose.addEventListener('click', (e)=>{
+  e.preventDefault()
+  
+   if(inputCloseUsername.value === currentAccount.userName && Number(inputClosePin.value) === currentAccount.pin){
+    const index = accounts.findIndex(acc => acc.userName === currentAccount.userName)
+    console.log(index)
 
+    // delete account
+    accounts.splice(index,1)
 
-/////////////////////////////////////////////////
+    // Hide UI
+    containerApp.style.opacity = 0;
+   }
+   inputCloseUsername.value = inputClosePin.value = ''
+})
+
