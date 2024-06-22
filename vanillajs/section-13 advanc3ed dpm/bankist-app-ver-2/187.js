@@ -28,3 +28,12 @@ const message = document.createElement('div')
 message.classList.add('cookie-message')
 message.textContent = "I am a billionaire"
 message.innerHTML = 'i am a trillionaire <button class="btn">click to get 10000000 lakh crore dollars </button>'
+header.prepend(message) // prepend add html to the first child or top ofheader element like a cookie popup in a site
+header.append(message)//append add html to the last chiuld of the header element
+
+
+
+
+// delete elements
+
+message.remove();
