@@ -43,9 +43,12 @@ const btnScrollTO = document.querySelector('.btn--scroll-to')
 const section1 = document.querySelector("#section--1")
 
 btnScrollTO.addEventListener('click',function(e){
-    const s1coords = section1.getBoundingClientRect(); // this will get the co-ordinates of the section1 
+   const s1coords = section1.getBoundingClientRect(); // this will get the co-ordinates of the section1 
 
 
     // scrollling
-    window.scrollTo(s1coords.left+ window.pageXOffset, s1coords.top + window.pageYOffset)
+     window.scrollTo(s1coords.left+ window.pageXOffset, s1coords.top + window.pageYOffset)
+
+   // modern way of imolementing smooth scrolling
+   //section1.scrollIntoVIew({behavior : 'smooth'})
 })
