@@ -51,4 +51,21 @@ btnScrollTO.addEventListener('click',function(e){
 
    // modern way of imolementing smooth scrolling
    //section1.scrollIntoVIew({behavior : 'smooth'})
+    
+})
+
+
+
+//implementing page navigation to the navbar
+
+
+document.querySelector('.nav__links').addEventListener('click',function(e){
+  
+  e.preventDefault();
+   
+   if(e.target.classList.contains('nav__link')){
+      
+       const id = e.target.getAttribute('href');
+       document.querySelector(id).scrollIntoView({behavior:'smooth'})
+   }
 })
